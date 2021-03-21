@@ -181,7 +181,8 @@ def getMasks(src, dest):
                 for i in range(sample):
                     x1 = randrange(0, x - matrix)
                     y1 = randrange(0, y - matrix)
-                    img = test.crop((x1, y1, x1 + matrix, y1 + matrix))
+                    # img = test.crop((x1, y1, x1 + matrix, y1 + matrix))
+                    img = test[x1: x1+matrix, y1: y1+matrix]
                     # do not save image if just black square
                     if np.sum(img) == 0:
                         continue
