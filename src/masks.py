@@ -151,13 +151,13 @@ def getUniqueID():
 
 def getHomography(img, dest):    
     for i in range(100):
-        img = transform_image(image,20,10,5)
-        if np.sum(img) != 0:
+        image = transform_image(img,20,10,5)
+        if np.sum(image) != 0:
             # for save initial image
-            plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (img * 255).astype(np.uint8), cmap='gray')
+            plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (image * 255).astype(np.uint8), cmap='gray')
 
             # flip and rotate image by 90, 180, 270 degrees, and save
-            rotateImages(img, dest)
+            rotateImages(image, dest)
     return
 
 
