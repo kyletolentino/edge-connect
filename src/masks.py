@@ -36,8 +36,8 @@ def transform_image(img,ang_range,shear_range,trans_range):
     # Rotation
 
     ang_rot = np.random.uniform(ang_range)-ang_range/2
-    rows,cols,ch = img.shape    
-#     rows,cols = img.shape
+    # rows,cols,ch = img.shape    
+    rows,cols = img.shape
     Rot_M = cv2.getRotationMatrix2D((cols/2,rows/2),ang_rot,1)
 
     # Translation
