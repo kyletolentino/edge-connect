@@ -173,8 +173,8 @@ def getMasks(src, dest):
             sample = 10
             
             if x <= matrix:
-                txt = "/mask{id}.png".format(id=getUniqueID())
-                test.save(dest+txt, 'PNG')
+                # txt = "/mask{id}.png".format(id=getUniqueID())
+                plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (img * 255).astype(np.uint8), cmap='gray')
                 # apply augmentation to given image
                 getHomography(test, dest)
 
@@ -189,8 +189,9 @@ def getMasks(src, dest):
                         continue
 
                     # save mask
-                    txt = "/mask{id}.png".format(id=getUniqueID())
-                    img.save(dest+txt, 'PNG')
+                    # txt = "/mask{id}.png".format(id=getUniqueID())
+                    # img.save(dest+txt, 'PNG')
+                    plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (img * 255).astype(np.uint8), cmap='gray')
 
                     # apply augmentation to given image
                     getHomography(img, dest)
