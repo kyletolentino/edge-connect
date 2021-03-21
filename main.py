@@ -101,7 +101,7 @@ def load_config(mode=None):
 
     # train mode
     if mode == 1:
-        mask_dir = config.TRAIN_MASK_FLIST
+        # mask_dir = config.TRAIN_MASK_FLIST
         if len(os.listdir('./mask_pipeline/train')) == 0:
             getMasks('/home/kylett2/urap/gated-edge/LR', './mask_pipeline/train')
             # save flist into config.TRAIN_MASK_FLIST dir
@@ -113,7 +113,7 @@ def load_config(mode=None):
                         images.append(os.path.join(root, file))
 
             images = sorted(images)
-            np.savetxt(mask_dir, images, fmt='%s')
+            np.savetxt('./datasets/mask_train.flist', images, fmt='%s')
 
         config.MODE = 1
         if args.model:
