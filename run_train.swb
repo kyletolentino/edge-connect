@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name="GCP_TRAIN"
-#SBATCH --partition=gpux8
-#SBATCH --output="GCP.%j.%N.out"
+#SBATCH --job-name="ECP_TRAIN"
+#SBATCH --partition=gpux1
+#SBATCH --output="ECP.%j.%N.out"
 #SBATCH --time=24
-#SBATCH --error="GCP.%j.%N.err"
+#SBATCH --error="ECP.%j.%N.err"
 python train.py --model 1 --checkpoints ./checkpoints/pipeline
 

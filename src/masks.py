@@ -167,7 +167,7 @@ def getMasks(src, dest):
             test = generateMasks(src+'/'+image)
 
             # get random crops (say 10 samples)
-            x,y,ch = test.shape   
+            x,y = test.shape   
             matrix = 256
             sample = 10
             
@@ -181,16 +181,16 @@ def getMasks(src, dest):
                 for i in range(sample):
                     x1 = randrange(0, x - matrix)
                     y1 = randrange(0, y - matrix)
-                    test = img.crop((x1, y1, x1 + matrix, y1 + matrix))
+                    img = test.crop((x1, y1, x1 + matrix, y1 + matrix))
                     # do not save image if just black square
-                    if np.sum(test) == 0:
+                    if np.sum(img) == 0:
                         continue
 
                     # save mask
                     txt = "/mask{id}.png".format(id=getUniqueID())
-                    test.save(dest+txt, 'PNG')
+                    img.save(dest+txt, 'PNG')
 
                     # apply augmentation to given image
-                    getHomography(test, dest)
+                    getHomography(img, dest)
                     
     return
