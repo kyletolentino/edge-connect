@@ -7,6 +7,7 @@ import argparse
 from shutil import copyfile
 from src.config import Config
 from src.edge_connect import EdgeConnect
+from src.masks import getMasks
 
 
 def main(mode=None):
@@ -100,6 +101,20 @@ def load_config(mode=None):
 
     # train mode
     if mode == 1:
+        mask_dir = config.TRAIN_MASK_FLIST
+        if len(os.listdir('./mask_pipeline/train')) == 0:
+            getMasks('./LR', './mask_pipeline/train')
+            # save flist into config.TRAIN_MASK_FLIST dir
+            images = []
+            for root, dirs, files in os.walk('./mask_pipeline/train'):
+                print('loading ' + root)
+                for file in files:
+                    if os.path.splitext(file)[1].upper() in ext:
+                        images.append(os.path.join(root, file))
+
+            images = sorted(images)
+            np.savetxt(mask_dir, images, fmt='%s')
+
         config.MODE = 1
         if args.model:
             config.MODEL = args.model
