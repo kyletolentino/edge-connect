@@ -103,7 +103,7 @@ def load_config(mode=None):
     if mode == 1:
         mask_dir = config.TRAIN_MASK_FLIST
         if len(os.listdir('./mask_pipeline/train')) == 0:
-            getMasks('./LR', './mask_pipeline/train')
+            getMasks('/home/kylett2/urap/gated-edge/LR', './mask_pipeline/train')
             # save flist into config.TRAIN_MASK_FLIST dir
             images = []
             for root, dirs, files in os.walk('./mask_pipeline/train'):
