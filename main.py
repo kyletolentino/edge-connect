@@ -8,6 +8,8 @@ from shutil import copyfile
 from src.config import Config
 from src.edge_connect import EdgeConnect
 from src.masks import getMasks
+from os import path
+import shutil
 
 
 def main(mode=None):
@@ -102,18 +104,46 @@ def load_config(mode=None):
     # train mode
     if mode == 1:
         # mask_dir = config.TRAIN_MASK_FLIST
-        if len(os.listdir('./mask_pipeline/train')) == 0:
-            getMasks('/home/kylett2/urap/gated-edge/LR', './mask_pipeline/train')
+        if len(os.listdir('./mask_pipeline/train/')) == 0:
+            getMasks('/home/kylett2/urap/gated-edge/LR/', './mask_pipeline/train/')
             # save flist into config.TRAIN_MASK_FLIST dir
-            images = []
+            # 40-40-20 split
+            files = os.listdir('./mask_pipeline/train')
+            num = (len(files) * 2)/10
+            count = 1
+            for filename in files:
+                p = os.path.join('./mask_pipeline/train/', filename)
+                if count <= num:
+                    shutil.move(p, './mask_pipeline/test/')
+                else:
+                    shutil.move(p, './mask_pipeline/val/')
+                count += 1
+
+            print("Created and moved masks")
+
+            train_images = []
             for root, dirs, files in os.walk('./mask_pipeline/train'):
                 print('loading ' + root)
                 for file in files:
                     if os.path.splitext(file)[1].upper() in ext:
-                        images.append(os.path.join(root, file))
+                        train_images.append(os.path.join(root, file))
+            np.savetxt('./datasets/mask_train.flist', train_images, fmt='%s')
 
-            images = sorted(images)
-            np.savetxt('./datasets/mask_train.flist', images, fmt='%s')
+            test_images = []
+            for root, dirs, files in os.walk('./mask_pipeline/train'):
+                print('loading ' + root)
+                for file in files:
+                    if os.path.splitext(file)[1].upper() in ext:
+                        test_images.append(os.path.join(root, file))
+            np.savetxt('./datasets/mask_test.flist', test_images, fmt='%s')
+
+            val_images = []
+            for root, dirs, files in os.walk('./mask_pipeline/train'):
+                print('loading ' + root)
+                for file in files:
+                    if os.path.splitext(file)[1].upper() in ext:
+                        val_images.append(os.path.join(root, file))
+            np.savetxt('./datasets/mask_val.flist', val_images, fmt='%s')
 
         config.MODE = 1
         if args.model:
