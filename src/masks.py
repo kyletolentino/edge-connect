@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import random
 from random import randrange
 from os import path
+from scipy.misc import imread
+import scipy
 
 max_masks = 100000
 taken = {}
@@ -62,7 +64,7 @@ def transform_image(img,ang_range,shear_range,trans_range):
     img = cv2.warpAffine(img,Trans_M,(cols,rows))
     img = cv2.warpAffine(img,shear_M,(cols,rows))
     
-    img = augment_brightness_camera_images(img)
+    # img = augment_brightness_camera_images(img)
     
     return img
 
@@ -124,17 +126,21 @@ def generateMasks(path):
 
 def rotateImages(img, dest):
     # for each image, save a flipped/rotated version
-    r90 = cv2.rotate(img, cv2.ROTATE_90)
-    plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (r90 * 255).astype(np.uint8), cmap='gray')
+    r90 = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+    # plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (r90 * 255).astype(np.uint8), cmap='gray')
+    scipy.misc.toimage(r90).save(dest+'/mask{}.png'.format(getUniqueID()))
 
     r180 = cv2.rotate(img, cv2.ROTATE_180)
-    plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (r180 * 255).astype(np.uint8), cmap='gray')
+    # plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (r180 * 255).astype(np.uint8), cmap='gray')
+    scipy.misc.toimage(r180).save(dest+'/mask{}.png'.format(getUniqueID()))
 
     r270 = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
-    plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (r270 * 255).astype(np.uint8), cmap='gray')
+    # plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (r270 * 255).astype(np.uint8), cmap='gray')
+    scipy.misc.toimage(r270).save(dest+'/mask{}.png'.format(getUniqueID()))
 
     rFlip = cv2.flip(img, 1)
-    plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (rFlip * 255).astype(np.uint8), cmap='gray')
+    # plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (rFlip * 255).astype(np.uint8), cmap='gray')
+    scipy.misc.toimage(rFlip).save(dest+'/mask{}.png'.format(getUniqueID()))
     
     return
 
@@ -154,7 +160,8 @@ def getHomography(img, dest):
         image = transform_image(img,20,10,5)
         if np.sum(image) != 0:
             # for save initial image
-            plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (image * 255).astype(np.uint8), cmap='gray')
+            # plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (image * 255).astype(np.uint8), cmap='gray')
+            scipy.misc.toimage(image).save(dest+'/mask{}.png'.format(getUniqueID()))
 
             # flip and rotate image by 90, 180, 270 degrees, and save
             rotateImages(image, dest)
@@ -174,7 +181,8 @@ def getMasks(src, dest):
             
             if x <= matrix:
                 # txt = "/mask{id}.png".format(id=getUniqueID())
-                plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (img * 255).astype(np.uint8), cmap='gray')
+                # plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (img * 255).astype(np.uint8), cmap='gray')
+                scipy.misc.toimage(test).save(dest+'/mask{}.png'.format(getUniqueID()))
                 # apply augmentation to given image
                 getHomography(test, dest)
 
@@ -191,7 +199,8 @@ def getMasks(src, dest):
                     # save mask
                     # txt = "/mask{id}.png".format(id=getUniqueID())
                     # img.save(dest+txt, 'PNG')
-                    plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (img * 255).astype(np.uint8), cmap='gray')
+                    # plt.imsave(dest+'/mask{}.png'.format(getUniqueID()), (img * 255).astype(np.uint8), cmap='gray')
+                    scipy.misc.toimage(img).save(dest+'/mask{}.png'.format(getUniqueID()))
 
                     # apply augmentation to given image
                     getHomography(img, dest)
